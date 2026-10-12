@@ -247,7 +247,8 @@ const handleLogin = async (params: any) => {
     }
     const loginDataLoginForm = { ...loginData.loginForm }
     loginDataLoginForm.captchaVerification = params.captchaVerification
-    const res = await LoginApi.login(loginDataLoginForm)
+    // 请求失败时 Axios 拦截器已展示提示，停留在登录页并允许重试。
+    const res = await LoginApi.login(loginDataLoginForm).catch(() => undefined)
     if (!res) {
       return
     }
@@ -273,7 +274,7 @@ const handleLogin = async (params: any) => {
     }
   } finally {
     loginLoading.value = false
-    loading.value.close()
+    loading.value?.close()
   }
 }
 
